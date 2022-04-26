@@ -27,17 +27,21 @@ pip install prefect-dbtcloud
 ```python
 from prefect import flow
 from prefect_dbtcloud.tasks import (
-    goodbye_prefect_dbtcloud,
-    hello_prefect_dbtcloud,
+    run_job
 )
 
 
 @flow
-def example_flow():
-    hello_prefect_dbtcloud
-    goodbye_prefect_dbtcloud
+def trigger_dbt_cloud_job_run():
+    run_job(
+        cause="<the motivation to run the job>",
+        account_id=<your dbt Cloud Account ID>,
+        job_id=<the identifier of the job to run>,
+        token="<your dbt Cloud API token>",
+        wait_for_job_run_completion=False
+    )
 
-example_flow()
+trigger_dbt_cloud_job_run()
 ```
 
 ## Resources
