@@ -271,21 +271,6 @@
   
 
     
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../flows.md" class="md-nav__link">
-        Flows
-      </a>
-    </li>
-  
-
-    
   </ul>
 </nav>
                   </div>
@@ -434,31 +419,31 @@ https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun</p></td>
         <td><code>account_id_env_var_name</code></td>
         <td><code>Optional[str]</code></td>
         <td><p>the name of the env var that contains the dbt Cloud account ID.
-Defaults to DBT_CLOUD_ACCOUNT_ID.
-Used only if account_id is None.</p></td>
+Defaults is <code>'ACCOUNT_ID'</code>.
+Used only if <code>account_id</code> is <code>None</code>.</p></td>
         <td><code>&#39;ACCOUNT_ID&#39;</code></td>
       </tr>
       <tr>
         <td><code>job_id_env_var_name</code></td>
         <td><code>Optional[str]</code></td>
         <td><p>the name of the env var that contains the dbt Cloud job ID
-Default to DBT_CLOUD_JOB_ID.
-Used only if job_id is None.</p></td>
+Default to <code>'JOB_ID'</code>.
+Used only if <code>job_id</code> is <code>None</code>.</p></td>
         <td><code>&#39;JOB_ID&#39;</code></td>
       </tr>
       <tr>
         <td><code>token_env_var_name</code></td>
         <td><code>Optional[str]</code></td>
         <td><p>the name of the env var that contains the dbt Cloud token
-Default to DBT_CLOUD_TOKEN.
-Used only if token is None.</p></td>
+Default to <code>'DBT_CLOUD_TOKEN'</code>.
+Used only if <code>token</code> is <code>None</code>.</p></td>
         <td><code>&#39;DBT_CLOUD_TOKEN&#39;</code></td>
       </tr>
       <tr>
         <td><code>wait_for_job_run_completion</code></td>
         <td><code>Optional[bool]</code></td>
         <td><p>Whether the task should wait for the job run completion or not.
-Default to False.</p></td>
+Default is <code>False</code>.</p></td>
         <td><code>False</code></td>
       </tr>
       <tr>
@@ -466,7 +451,7 @@ Default to False.</p></td>
         <td><code>Optional[int]</code></td>
         <td><p>The number of seconds to wait for the dbt Cloud
 job to finish.
-Used only if wait_for_job_run_completion = True.</p></td>
+Used only if <code>wait_for_job_run_completion</code> is <code>True</code>.</p></td>
         <td><code>None</code></td>
       </tr>
   </tbody>
@@ -481,15 +466,18 @@ Used only if wait_for_job_run_completion = True.</p></td>
   </thead>
   <tbody>
     <tr>
-      <td><code>if wait_for_job_run_completion = False, then returns the trigger run result.
-    The trigger run result is the dict under the &#34;data&#34; key.
-    Have a look at the Response section at</code></td>
-      <td><p>if wait_for_job_run_completion = True, then returns the get job result.
-    The get job result is the dict under the "data" key.
-    Links to the dbt artifacts are
-    also included under the <code>artifact_urls</code> key.
-    Have a look at the Response section at:
-    https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById</p></td>
+      <td><code>Dict</code></td>
+      <td><p>When <code>wait_for_job_run_completion</code> is <code>False</code>, then returns
+    the trigger run result.
+    The trigger run result is the dict under the <code>data</code> key.
+    Please refer to the dbt Cloud Trigger Run API documentation
+    for more information regarding the returned payload.
+    When <code>wait_for_job_run_completion</code> is <code>True</code>, then returns
+    the get job result.
+    The get job result is the dict under the <code>data</code> key.
+    Links to the dbt artifacts are also included under the <code>artifact_urls</code> key.
+    Please refere to the dbt Cloud Get Run API documentation
+    for more information regarding the returned payload.</p></td>
     </tr>
   </tbody>
 </table>
@@ -527,38 +515,41 @@ Used only if wait_for_job_run_completion = True.</p></td>
 <span class="sd">            https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun</span>
 <span class="sd">        account_id_env_var_name:</span>
 <span class="sd">            the name of the env var that contains the dbt Cloud account ID.</span>
-<span class="sd">            Defaults to DBT_CLOUD_ACCOUNT_ID.</span>
-<span class="sd">            Used only if account_id is None.</span>
+<span class="sd">            Defaults is `&#39;ACCOUNT_ID&#39;`.</span>
+<span class="sd">            Used only if `account_id` is `None`.</span>
 <span class="sd">        job_id_env_var_name:</span>
 <span class="sd">            the name of the env var that contains the dbt Cloud job ID</span>
-<span class="sd">            Default to DBT_CLOUD_JOB_ID.</span>
-<span class="sd">            Used only if job_id is None.</span>
+<span class="sd">            Default to `&#39;JOB_ID&#39;`.</span>
+<span class="sd">            Used only if `job_id` is `None`.</span>
 <span class="sd">        token_env_var_name:</span>
 <span class="sd">            the name of the env var that contains the dbt Cloud token</span>
-<span class="sd">            Default to DBT_CLOUD_TOKEN.</span>
-<span class="sd">            Used only if token is None.</span>
+<span class="sd">            Default to `&#39;DBT_CLOUD_TOKEN&#39;`.</span>
+<span class="sd">            Used only if `token` is `None`.</span>
 <span class="sd">        wait_for_job_run_completion:</span>
 <span class="sd">            Whether the task should wait for the job run completion or not.</span>
-<span class="sd">            Default to False.</span>
+<span class="sd">            Default is `False`.</span>
 <span class="sd">        max_wait_time: The number of seconds to wait for the dbt Cloud</span>
 <span class="sd">            job to finish.</span>
-<span class="sd">            Used only if wait_for_job_run_completion = True.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        if wait_for_job_run_completion = False, then returns the trigger run result.</span>
-<span class="sd">            The trigger run result is the dict under the &quot;data&quot; key.</span>
-<span class="sd">            Have a look at the Response section at:</span>
-<span class="sd">            https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun</span>
-
-<span class="sd">        if wait_for_job_run_completion = True, then returns the get job result.</span>
-<span class="sd">            The get job result is the dict under the &quot;data&quot; key.</span>
-<span class="sd">            Links to the dbt artifacts are</span>
-<span class="sd">            also included under the `artifact_urls` key.</span>
-<span class="sd">            Have a look at the Response section at:</span>
-<span class="sd">            https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById</span>
+<span class="sd">            Used only if `wait_for_job_run_completion` is `True`.</span>
 
 <span class="sd">    Raises:</span>
+<span class="sd">        `DbtCloudConfigurationException` if the `account_id` is not specified.</span>
+<span class="sd">        `DbtCloudConfigurationException` if the `job_id` is not specified.</span>
+<span class="sd">        `DbtCloudConfigurationException` if the `token` is not specified.</span>
+<span class="sd">        `DbtCloudConfigurationException` if the `cause` is not specified.</span>
 
+<span class="sd">    Returns:</span>
+<span class="sd">        When `wait_for_job_run_completion` is `False`, then returns</span>
+<span class="sd">            the trigger run result.</span>
+<span class="sd">            The trigger run result is the dict under the `data` key.</span>
+<span class="sd">            Please refer to the dbt Cloud Trigger Run API documentation</span>
+<span class="sd">            for more information regarding the returned payload.</span>
+<span class="sd">            When `wait_for_job_run_completion` is `True`, then returns</span>
+<span class="sd">            the get job result.</span>
+<span class="sd">            The get job result is the dict under the `data` key.</span>
+<span class="sd">            Links to the dbt artifacts are also included under the `artifact_urls` key.</span>
+<span class="sd">            Please refere to the dbt Cloud Get Run API documentation</span>
+<span class="sd">            for more information regarding the returned payload.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">account_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">account_id_env_var_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
         <span class="n">account_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">account_id_env_var_name</span><span class="p">])</span>
@@ -625,13 +616,6 @@ Used only if wait_for_job_run_completion = True.</p></td>
         <span class="n">artifact_links</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">artifact_links</span> <span class="o">=</span> <span class="n">dbt_cloud_client</span><span class="o">.</span><span class="n">list_run_artifact_links</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">job_run_id</span><span class="p">)</span>
-
-            <span class="c1"># Note: artifacts do not exist in Prefect 2.0</span>
-            <span class="c1"># markdown = f&quot;Artifacts for dbt Cloud run {job_run_id} of job {job_id}\n&quot;</span>
-            <span class="c1"># for link, name in artifact_links:</span>
-            <span class="c1">#     markdown += f&quot;- [{name}]({link})\n&quot;</span>
-            <span class="c1"># create_markdown_artifact(markdown)</span>
-
         <span class="k">except</span> <span class="n">DbtCloudListArtifactsFailed</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="n">logger</span> <span class="o">=</span> <span class="n">get_run_logger</span><span class="p">()</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
