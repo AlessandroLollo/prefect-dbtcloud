@@ -1,10 +1,7 @@
 """This is an example flows module"""
 from prefect import flow
 
-from prefect_dbtcloud.tasks import (
-    goodbye_prefect_dbtcloud,
-    hello_prefect_dbtcloud,
-)
+from prefect_dbtcloud.tasks import goodbye_prefect_dbtcloud, hello_prefect_dbtcloud
 
 
 @flow
