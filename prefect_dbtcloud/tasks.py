@@ -45,38 +45,41 @@ def run_job(
             https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun
         account_id_env_var_name:
             the name of the env var that contains the dbt Cloud account ID.
-            Defaults to DBT_CLOUD_ACCOUNT_ID.
-            Used only if account_id is None.
+            Defaults is `'ACCOUNT_ID'`.
+            Used only if `account_id` is `None`.
         job_id_env_var_name:
             the name of the env var that contains the dbt Cloud job ID
-            Default to DBT_CLOUD_JOB_ID.
-            Used only if job_id is None.
+            Default to `'JOB_ID'`.
+            Used only if `job_id` is `None`.
         token_env_var_name:
             the name of the env var that contains the dbt Cloud token
-            Default to DBT_CLOUD_TOKEN.
-            Used only if token is None.
+            Default to `'DBT_CLOUD_TOKEN'`.
+            Used only if `token` is `None`.
         wait_for_job_run_completion:
             Whether the task should wait for the job run completion or not.
-            Default to False.
+            Default is `False`.
         max_wait_time: The number of seconds to wait for the dbt Cloud
             job to finish.
-            Used only if wait_for_job_run_completion = True.
-
-    Returns:
-        if wait_for_job_run_completion = False, then returns the trigger run result.
-            The trigger run result is the dict under the "data" key.
-            Have a look at the Response section at:
-            https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun
-
-        if wait_for_job_run_completion = True, then returns the get job result.
-            The get job result is the dict under the "data" key.
-            Links to the dbt artifacts are
-            also included under the `artifact_urls` key.
-            Have a look at the Response section at:
-            https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById
+            Used only if `wait_for_job_run_completion` is `True`.
 
     Raises:
+        `DbtCloudConfigurationException` if the `account_id` is not specified.
+        `DbtCloudConfigurationException` if the `job_id` is not specified.
+        `DbtCloudConfigurationException` if the `token` is not specified.
+        `DbtCloudConfigurationException` if the `cause` is not specified.
 
+    Returns:
+        When `wait_for_job_run_completion` is `False`, then returns
+            the trigger run result.
+            The trigger run result is the dict under the `data` key.
+            Please refer to the dbt Cloud Trigger Run API documentation
+            for more information regarding the returned payload.
+            When `wait_for_job_run_completion` is `True`, then returns
+            the get job result.
+            The get job result is the dict under the `data` key.
+            Links to the dbt artifacts are also included under the `artifact_urls` key.
+            Please refere to the dbt Cloud Get Run API documentation
+            for more information regarding the returned payload.
     """
     if account_id is None and account_id_env_var_name in os.environ:
         account_id = int(os.environ[account_id_env_var_name])
@@ -143,13 +146,6 @@ def run_job(
         artifact_links = []
         try:
             artifact_links = dbt_cloud_client.list_run_artifact_links(run_id=job_run_id)
-
-            # Note: artifacts do not exist in Prefect 2.0
-            # markdown = f"Artifacts for dbt Cloud run {job_run_id} of job {job_id}\n"
-            # for link, name in artifact_links:
-            #     markdown += f"- [{name}]({link})\n"
-            # create_markdown_artifact(markdown)
-
         except DbtCloudListArtifactsFailed as err:
             logger = get_run_logger()
             logger.warning(
