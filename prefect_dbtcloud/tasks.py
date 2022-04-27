@@ -76,31 +76,16 @@ def create_job(
             specification for the job.
 
     Raises:
-        DbtCloudConfigurationException:
-            if `execute_steps` is not specified.
-        DbtCloudConfigurationException:
-            if the `environment_id` is not specified.
-        DbtCloudConfigurationException:
-            if the `project_id` is not specified.
-        DbtCloudConfigurationException:
-            if the `name` is not specified.
-        DbtCloudConfigurationException:
-            if the `account_id` is not specified.
-        DbtCloudConfigurationException:
-            if the `token` is not specified.
+        DbtCloudConfigurationException: if `execute_steps` is not specified.
+        DbtCloudConfigurationException: if the `environment_id` is not specified.
+        DbtCloudConfigurationException: if the `project_id` is not specified.
+        DbtCloudConfigurationException: if the `name` is not specified.
+        DbtCloudConfigurationException: if the `account_id` is not specified.
+        DbtCloudConfigurationException: if the `token` is not specified.
 
     Returns:
-        When `wait_for_job_run_completion` is `False`, then returns
-            the trigger run result.
-            The trigger run result is the dict under the `data` key.
-            Please refer to the dbt Cloud Trigger Run API documentation
-            for more information regarding the returned payload.
-            When `wait_for_job_run_completion` is `True`, then returns
-            the get job result.
-            The get job result is the dict under the `data` key.
-            Links to the dbt artifacts are also included under the `artifact_urls` key.
-            Please refere to the dbt Cloud Get Run API documentation
-            for more information regarding the returned payload.
+        The create job response, namely the `data` key from
+            the API response.
     """
     if account_id is None and account_id_env_var_name in os.environ:
         account_id = int(os.environ[account_id_env_var_name])
@@ -227,14 +212,10 @@ def run_job(
             Used only if `wait_for_job_run_completion` is `True`.
 
     Raises:
-        DbtCloudConfigurationException:
-            if the `account_id` is not specified.
-        DbtCloudConfigurationException:
-            if the `job_id` is not specified.
-        DbtCloudConfigurationException:
-            if the `token` is not specified.
-        DbtCloudConfigurationException:
-            if the `cause` is not specified.
+        DbtCloudConfigurationException: if the `account_id` is not specified.
+        DbtCloudConfigurationException: if the `job_id` is not specified.
+        DbtCloudConfigurationException: if the `token` is not specified.
+        DbtCloudConfigurationException: if the `cause` is not specified.
 
     Returns:
         When `wait_for_job_run_completion` is `False`, then returns
