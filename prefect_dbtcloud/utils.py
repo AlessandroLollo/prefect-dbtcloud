@@ -8,6 +8,7 @@ import prefect
 from requests import Session
 
 from prefect_dbtcloud.exceptions import (
+    DbtCloudCreateJobFailed,
     DbtCloudListArtifactsFailed,
     DbtCloudRunCanceled,
     DbtCloudRunFailed,
@@ -23,6 +24,12 @@ class dbtCloudClient:
     to trigger job runs and retrieve job run information.
 
     """
+
+    # dbt Cloud Create Job API
+    # https://docs.getdbt.com/dbt-cloud/api-v2#operation/createJob
+    __DBT_CLOUD_CREATE_JOB_API_ENDPOINT_V2 = (
+        "https://{apiDomain}/api/v2/accounts/{accountId}/jobs/"
+    )
 
     # dbt Cloud Trigger Job API
     # https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun
@@ -90,6 +97,17 @@ class dbtCloudClient:
         """
         return cls.__USER_AGENT_HEADER
 
+    def dbt_cloud_create_job_api_endpoint_v2(self) -> str:
+        """
+        Return the URL of the Create Job API.
+
+        Returns:
+            The URL of the Create Job API.
+        """
+        return self.__DBT_CLOUD_CREATE_JOB_API_ENDPOINT_V2.format(
+            apiDomain=self.api_domain, accountId=self.account_id
+        )
+
     def dbt_cloud_trigger_job_api_endpoint_v2(self, job_id: int) -> str:
         """
         Return the URL of the Trigger Job API.
@@ -148,6 +166,77 @@ class dbtCloudClient:
             runId=run_id,
             path=path,
         )
+
+    def create_job(
+        self,
+        project_id: int,
+        environment_id: int,
+        name: str,
+        execute_steps: List[str],
+        dbt_version: Optional[str] = None,
+        triggers: Optional[Dict] = None,
+        settings: Optional[Dict] = None,
+        generate_docs: Optional[bool] = False,
+        schedule: Optional[Dict] = None,
+    ):
+        """
+        Create a new dbt Cloud job.
+
+        Args:
+            project_id: the ID of the project where the
+                job will be created.
+            environment_id: the ID of the environment that will
+                be used to run the job.
+            name: the name of the job.
+            execute_steps: The list of dbt commands the job
+                will execute when triggered.
+            dbt_version: the dbt version to use to run the job.
+                If provided, it will override the one defined
+                in the environment.
+            triggers: an object describing which trigger types
+                will be enabled for the job.
+            settings: an object containing settings to be applied
+                to the job when running.
+            generate_docs: whether to run `dbt docs generate` or not,
+                after the job has been executed.
+            schedule: an object that contains the run schedule
+                specification for the job.
+
+        Returns:
+            The create job result, namely the `data` key in the API response.
+
+        Raises:
+            `DbtCloudCreateJobFailed`: when the response code != 200
+        """
+        url = self.dbt_cloud_create_job_api_endpoint_v2()
+
+        data = {}
+        data["project_id"] = project_id
+        data["environment_id"] = environment_id
+        data["name"] = name
+        data["execute_steps"] = execute_steps
+
+        if dbt_version:
+            data["dbt_version"] = dbt_version
+
+        if triggers:
+            data["triggers"] = triggers
+
+        if settings:
+            data["settings"] = settings
+
+        if generate_docs:
+            data["generate_docs"] = generate_docs
+
+        if schedule:
+            data["schedule"] = schedule
+
+        with self.session.post(url, data=data) as create_job_request:
+
+            if create_job_request.status_code != 200:
+                raise DbtCloudCreateJobFailed(create_job_request.reason)
+
+        return create_job_request.json()["data"]
 
     def trigger_job_run(
         self,

@@ -16,6 +16,12 @@ class DbtCloudConfigurationException(Exception):
     pass
 
 
+class DbtCloudCreateJobFailed(DbtCloudBaseException):
+    """Raise when job creation fails"""
+
+    pass
+
+
 class TriggerDbtCloudRunFailed(DbtCloudBaseException):
     """Raised when triggering a dbt job run fails"""
 
